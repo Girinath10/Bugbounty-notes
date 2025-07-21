@@ -1,0 +1,27 @@
+What is getJS?
+
+getJS is a tool to extract JavaScript file URLs from websites using subdomain enumeration + HTML parsing. It's written in Go and available on GitHub.
+
+How to Install getJS:
+1. If you have Go installed:
+go install github.com/003random/getJS@latest
+
+2.Then add $HOME/go/bin to your PATH if it's not already:
+export PATH=$PATH:$HOME/go/bin
+
+3 .Or clone manually:
+git clone https://github.com/003random/getJS.git
+cd getJS
+go build
+sudo mv getJS /usr/local/bin/
+
+
+Command:
+
+getJS --url https://target.com | xargs -I % curl -s -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" % | grep -Ei 'apikey|token|secret|auth|bearer|key|passwd|authorization|client[_-]?id' > output-secrets.txt
+
+
+or
+
+getJS --url https://target.com | xargs -I % curl -s % | grep -Ei 'apikey|token|secret'
+
