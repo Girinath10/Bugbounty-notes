@@ -1,0 +1,71 @@
+Bug name :Authentication Bypass via Replay of Valid Session Response
+
+Or more precisely:
+Improper Authentication Validation / Session Replay via Response Tampering.
+
+
+Scenario :
+What Happened? (Your Scenario Recap)
+
+    ✅ You logged in as User1 with correct credentials.
+
+    🧠 You captured the response (probably containing a JWT or access_token) in Burp or ZAP.
+
+    🔁 Then you tried logging in as User2 with wrong password.
+
+    📦 During the response intercept, you pasted User1’s successful response.
+
+    ✅ It allowed you to login as User1, even though the request was for User2.
+
+
+
+Steps to reproduce :
+
+1. I have two user credentials . user1 + credentials and user2 credentials.
+2. login user1 credentials.
+3.capture the request and response in burp
+4. In request --> right click --> do intercept --> request to the respone --> forword
+5. copy the request and response in note pad .
+
+
+6. I login user2 . correct user2 name only credentials wrong. 
+7.capture the request user2
+8.In request --> right click --> do intercept --> request to the respone --> forword
+9.after response , I change the whole response , I paste the user1 response .
+10.Forward the response.
+11. Boom -->>login successful with user2 wrong credentials.
+
+
+
+Mitigation Strategies :
+✅ 1. Don’t Trust Client-Side Response Modification
+
+    The server must generate and validate every auth token
+
+    Never accept user-pasted response or forged tokens
+
+✅ 2. Token Binding to Session/User
+
+    Ensure issued token/session is bound to the request origin
+
+    Example: token must match IP or user-agent + username
+
+✅ 3. Invalidate Old Sessions
+
+    On every login, invalidate previous session/token for that user
+
+✅ 4. Backend Must Verify Every Login
+
+    Always check:
+
+        Is username/password correct?
+
+        Is the response generated freshly by server?
+
+✅ 5. Implement HMAC or JWT Signature Validation
+
+    If it’s using JWTs:
+
+        Sign tokens with secret key
+
+        Validate them on every request (server-side only)
