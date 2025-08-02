@@ -1,0 +1,8 @@
+#subdomain enumeration :
+
+sublist3r -d example.com
+
+or save with output file.
+
+sublist3r -d example.com -o subs.txt
+
