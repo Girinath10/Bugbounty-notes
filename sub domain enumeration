@@ -6,3 +6,8 @@ or save with output file.
 
 sublist3r -d example.com -o subs.txt
 
+----------------------------------------
+#after identified subdomain now check the domain is active or not :
+cat subdomains.txt | httpx -status-code -title -content-length -follow-redirects -threads 50 -o alive.txt
+
+-------------------------------------------------------------------------------------------------
